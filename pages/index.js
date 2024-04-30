@@ -119,14 +119,15 @@ const Home = () => {
           </div>
         </div>
 
-        {showModal && (
+        {/* {showModal && ( */}
           <TaskModal
             task={selectedTask}
             onClose={closeModal}
             icons={icons}
             status={status}
+            isOpen={showModal}
           />
-        )}
+        {/* )} */}
       </main>
     </>
   );
