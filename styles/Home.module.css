@@ -1,0 +1,131 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400&family=Outfit:wght@100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@200&display=swap");
+
+.App {
+  text-align: left;
+}
+
+.App_header h2 {
+  font-family: "Outfit", sans-serif;
+}
+
+.App_header p {
+  font-family: "Outfit", sans-serif;
+}
+
+.tasks {
+  margin-left: 25%;
+  width: 50%;
+  font-family: "Outfit", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+}
+
+.add_task {
+  align-items: center;
+  display: flex;
+  background-color: #f5e8d5;
+  border: 1px solid #f5e8d5;
+  padding-left: 5%;
+  height: 10vh;
+  border-radius: 20px;
+  margin-bottom: 8%;
+  width: 100%;
+  padding: 0%;
+  /* background-color: #f5e8d5;
+  border: 1px solid #f5e8d5;
+  height: 114px;
+  border-radius: 20px; */
+}
+
+.add_task h4 {
+  font-size: 126%;
+  display: flex;
+  align-items: center;
+  text-align: left;
+  margin-top: -9%;
+  padding-left: 22%;
+}
+
+.add_task .icon {
+  margin-top: -1%;
+  margin-left: -80%;
+  background-color: #e9a23b;
+  color: #fff;
+  padding: 5%;
+  width: 4%;
+  height: 2vh;
+  border-radius: 10px;
+}
+
+.logo {
+  color: #e9a23b;
+  width: 3%;
+  height: 2vh;
+}
+
+.itens_tasks {
+  align-items: center;
+  display: grid;
+  grid-template-columns: 70% 266% 57%;
+}
+
+.itens_description {
+  font-family: "Outfit", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 200;
+  font-style: normal;
+  margin-top: -2%;
+  text-align: left;
+  margin-left: 20%;
+}
+
+.task_name {
+  margin-top: 18%;
+  margin-left: 13%;
+  text-align: justify;
+  font-size: 129%;
+}
+
+.icon_tasks {
+  background-color: white;
+  font-size: 110%;
+  padding-top: 14%;
+  margin-left: 7%;
+  border-radius: 8px;
+  width: 88%;
+  height: 6vh;
+}
+
+.icones {
+  margin-top: -3%;
+  margin-left: 20%;
+}
+
+.icon_status {
+  margin-top: 18%;
+}
+
+.dados_task {
+  font-family: "Outfit", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 200;
+  font-style: normal;
+  margin-top: -9%;
+  text-align: left;
+  width: 75%;
+  margin-left: 15%;
+}
+
+.tasks_itens {
+  background-color: #e3e8ef;
+  border-radius: 20px;
+  padding-bottom: 2px;
+  margin-bottom: 2.2vh;
+}
+
+.tasks_itens button {
+  margin-right: 70%;
+}

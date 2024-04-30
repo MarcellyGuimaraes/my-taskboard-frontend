@@ -1,118 +1,135 @@
-import Image from "next/image";
-import { Inter } from "next/font/google";
+import styles from '../styles/Home.module.css'
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
+import Image from 'next/image';
+import TaskModal from './components/TaskModal';
 
-const inter = Inter({ subsets: ["latin"] });
+const Home = () => {
+  const router = useRouter();
+  const { query } = router;
 
-export default function Home() {
+  const [showModal, setShowModal] = useState(false);
+  const [selectedTask, setSelectedTask] = useState(null);
+  const [status, setStatus] = useState([]);
+  const [tasks, setTasks] = useState([]);
+  const [icons, setIcons] = useState([]);
+
+  useEffect(() => {
+    const fetchData = () => {
+      // Substitua estas URLs pelas suas URLs reais
+      const statusPromise = fetch('https://my-taskboard-backend.onrender.com/status')
+        .then(response => response.json())
+        .then(data => setStatus(data))
+        .catch(error => console.error('Erro ao buscar status:', error));
+  
+      const tasksPromise = fetch('https://my-taskboard-backend.onrender.com/tasks')
+        .then(response => response.json())
+        .then(data => setTasks(data))
+        .catch(error => console.error('Erro ao buscar tarefas:', error));
+  
+      const iconsPromise = fetch('https://my-taskboard-backend.onrender.com/icones')
+        .then(response => response.json())
+        .then(data => setIcons(data))
+        .catch(error => console.error('Erro ao buscar ícones:', error));
+  
+      // Pode ser útil retornar as Promises para lidar com elas externamente, se necessário
+      return [statusPromise, tasksPromise, iconsPromise];
+    };
+  
+    fetchData();
+  }, []);  
+
+  if (!status || !tasks || !icons) return null;
+
+  const getStatusById = (statusId) => {
+    return status.find(item => item.status_id === statusId);
+  };
+
+  const getIconById = (iconId) => {
+    return icons.find(item => item.icone_id === iconId);
+  };
+
+  const getTaskById = (taskId) => {
+    return tasks.find(item => item.task_id === taskId);
+  };
+
+  const openModal = (task) => {
+    setSelectedTask(task);
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setSelectedTask(null);
+    setShowModal(false);
+    router.push('/');
+  };
+
+  const handleNewTaskClick = (e) => {
+    e.preventDefault(); 
+    // MUDAR A ROTA SEM REDIRECIONAR
+    window.history.pushState(null, null, `/new-task`);
+    openModal(null);
+  };
+
+  const handleTaskClick = (taskId, e) => {
+    e.preventDefault();
+    const task = getTaskById(taskId);
+    setSelectedTask(task);
+    setShowModal(true);
+    // MUDAR A ROTA SEM REDIRECIONAR
+    window.history.pushState(null, null, `/task/${taskId}`);
+  };
+
   return (
-    <main
-      className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}
-    >
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">pages/index.js</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+    <>
+      <main className="flex flex-col items-center">
+        <header>
+          <h2>
+            <i className="fa-solid fa-layer-group"></i> My Task Board
+          </h2>
+          <p>Tasks to keep organised</p>
+        </header>
+
+        <div>
+          {tasks.map((item) => (
+            <div key={item.task_id}>
+              <button className="flex gap-64" onClick={(e) => handleTaskClick(item.task_id, e)}>
+                <div className="flex gap-8">
+                  <div className="tasks_itens_icon">
+                    {/* Troque por uma imagem real */}
+                    <Image width={30} height={30} src={getIconById(item.icone_id)?.ico_url} alt={item.ico_name} />
+                  </div>
+                  <div className="tasks_itens_text">
+                    <h3>{item.tsk_name}</h3>
+                  </div>
+                </div>
+                <div className="tasks_itens_status" dangerouslySetInnerHTML={{ __html: getStatusById(item.status_id)?.sts_icon }} />
+              </button>
+            </div>
+          ))}
+          <div className="tasks_itens">
+            <button className="flex gap-64" onClick={handleNewTaskClick}>
+              <div className="flex gap-8">
+                <i className="fa-solid fa-plus"></i>
+                <div className="tasks_itens_text">
+                  <h3>Add task</h3>
+                </div>
+              </div>
+            </button>
+          </div>
         </div>
-      </div>
 
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-full sm:before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full sm:after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700/10 after:dark:from-sky-900 after:dark:via-[#0141ff]/40 before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Discover and deploy boilerplate example Next.js&nbsp;projects.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50 text-balance`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+        {showModal && (
+          <TaskModal
+            task={selectedTask}
+            onClose={closeModal}
+            icons={icons}
+            status={status}
+          />
+        )}
+      </main>
+    </>
   );
-}
+};
+
+export default Home;
