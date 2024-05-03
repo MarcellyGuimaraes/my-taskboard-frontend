@@ -152,9 +152,9 @@ const TaskModal = ({ task, icons, status, onClose, isOpen }) => {
             {status.map((sts) => (
               <div key={sts.status_id} className="w-[48%] buttons">
                   <input onChange={(e) => setTaskData({...taskData, status_id: parseInt(e.target.value)})} checked={taskData.status_id === sts.status_id} type="radio" id={`status-${sts.status_id}`} value={sts.status_id} className="hidden peer"/>
-                  <label htmlFor={`status-${sts.status_id}`} className="w-full inline-flex items-center p-1 pl-3 text-gray-500 bg-white border-2 border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 peer-checked:border-blue-600 hover:text-gray-600 dark:peer-checked:text-gray-300 peer-checked:text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">
+                  <label htmlFor={`status-${sts.status_id}`} className="w-full inline-flex items-center p-1 text-gray-500 bg-white border-2 border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 peer-checked:border-blue-600 hover:text-gray-600 dark:peer-checked:text-gray-300 peer-checked:text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">
                     <div className="tasks_itens_status w-16	pt-3.5 pb-3.5 rounded-lg text-white" dangerouslySetInnerHTML={{ __html: sts.sts_icon }} style={{ backgroundColor: sts.sts_color }} />
-                    <span className="pr-10">{ sts.sts_name }</span>
+                    <span className="pl-2">{ sts.sts_name }</span>
                   </label>
               </div>
               ))}
