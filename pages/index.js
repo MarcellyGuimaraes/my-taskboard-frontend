@@ -83,40 +83,36 @@ const Home = () => {
   return (
     <>
       <main className="flex flex-col items-center">
-        <header>
+        <header className='titulo pl-10'>
           <h2>
-            <i className="fa-solid fa-layer-group"></i> My Task Board
+            <i className="fa-solid fa-layer-group text-[#E9A23B]"></i> {' '}
+            <input className='text-left text-black placeholder-black hover:border-transparent focus:border-transparent focus:outline-none' placeholder='My Task Board'/>
           </h2>
-          <p>Tasks to keep organised</p>
+          <p className='pr-[22rem]'>Tasks to keep organised</p>
         </header>
 
-        <div>
-          {tasks.map((item) => (
-            <div key={item.task_id}>
-              <button className="flex gap-64" onClick={(e) => handleTaskClick(item.task_id, e)}>
-                <div className="flex gap-8">
-                  <div className="tasks_itens_icon">
-                    {/* Troque por uma imagem real */}
-                    <Image width={30} height={30} src={getIconById(item.icone_id)?.ico_url} alt={item.ico_name} />
-                  </div>
-                  <div className="tasks_itens_text">
-                    <h3>{item.tsk_name}</h3>
-                  </div>
+        <div className='w-2/3'>
+
+        {tasks.map((item) => (
+            <button key={item.task_id} className='flex w-full p-4 my-4 rounded-xl' style={{ backgroundColor: `${getStatusById(item.status_id)?.sts_color}75`, opacity: 1 }} onClick={(e) => handleTaskClick(item.task_id, e)}>
+                <div className='w-[10%] h-[6vh] flex items-center pl-2.5 rounded-lg bg-[#ffff]'>
+                  <Image width={30} height={30} src={getIconById(item.icone_id)?.ico_url} alt={item.ico_name} />
                 </div>
-                <div className="tasks_itens_status" dangerouslySetInnerHTML={{ __html: getStatusById(item.status_id)?.sts_icon }} />
-              </button>
-            </div>
-          ))}
-          <div className="tasks_itens">
-            <button className="flex gap-64" onClick={handleNewTaskClick}>
-              <div className="flex gap-8">
-                <i className="fa-solid fa-plus"></i>
-                <div className="tasks_itens_text">
-                  <h3>Add task</h3>
+                <div className='w-4/5 task_title pt-4 pr-96 pl-2.5' style={{ opacity: 1 }}>
+                  <h3 className='w-[165%] text-black'>{item.tsk_name}</h3>
                 </div>
-              </div>
+                <div className='w-[10%] h-[6vh] pt-1 flex items-center pl-5 rounded-lg text-white' dangerouslySetInnerHTML={{ __html: getStatusById(item.status_id)?.sts_icon }} style={{ backgroundColor: getStatusById(item.status_id)?.sts_color }} />
             </button>
-          </div>
+        ))}
+        
+          <button className="flex w-full p-4 my-4 bg-[#F5E8D5] rounded-xl" onClick={handleNewTaskClick}>
+            <div className='w-[8%]'>
+              <i className="fa-solid fa-plus bg-[#E9A23B] w-[3.5rem] h-[6vh] flex items-center pl-1.5 pt-4 pr-1.5 rounded-lg text-white"></i>
+            </div>
+            <div className="tasks_itens_text w-[90%] task_title pt-3 pr-96">
+              <h3>Add task</h3>
+            </div>
+          </button>
         </div>
 
         {/* {showModal && ( */}
