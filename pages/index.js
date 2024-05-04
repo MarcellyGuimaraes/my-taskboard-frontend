@@ -15,29 +15,30 @@ const Home = () => {
   const [icons, setIcons] = useState([]);
 
   useEffect(() => {
-    const fetchData = () => {
-      // Substitua estas URLs pelas suas URLs reais
-      const statusPromise = fetch('https://my-taskboard-backend.onrender.com/status')
-        .then(response => response.json())
-        .then(data => setStatus(data))
-        .catch(error => console.error('Erro ao buscar status:', error));
+    const fetchData = async () => {
+      try {
+        const [statusResponse, tasksResponse, iconsResponse] = await Promise.all([
+          fetch('https://my-taskboard-backend.onrender.com/status'),
+          fetch('https://my-taskboard-backend.onrender.com/tasks'),
+          fetch('https://my-taskboard-backend.onrender.com/icones')
+        ]);
   
-      const tasksPromise = fetch('https://my-taskboard-backend.onrender.com/tasks')
-        .then(response => response.json())
-        .then(data => setTasks(data))
-        .catch(error => console.error('Erro ao buscar tarefas:', error));
+        const [statusData, tasksData, iconsData] = await Promise.all([
+          statusResponse.json(),
+          tasksResponse.json(),
+          iconsResponse.json()
+        ]);
   
-      const iconsPromise = fetch('https://my-taskboard-backend.onrender.com/icones')
-        .then(response => response.json())
-        .then(data => setIcons(data))
-        .catch(error => console.error('Erro ao buscar ícones:', error));
-  
-      // Pode ser útil retornar as Promises para lidar com elas externamente, se necessário
-      return [statusPromise, tasksPromise, iconsPromise];
+        setStatus(statusData);
+        setTasks(tasksData);
+        setIcons(iconsData);
+      } catch (error) {
+        console.error('Erro ao buscar dados:', error);
+      }
     };
   
     fetchData();
-  }, []);  
+  }, []); 
 
   if (!status || !tasks || !icons) return null;
 
