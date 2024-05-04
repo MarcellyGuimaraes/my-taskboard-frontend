@@ -136,7 +136,7 @@ const TaskModal = ({ task, icons, status, onClose, isOpen }) => {
         <div className="mb-4">
           <h6>Icon</h6>
           <div className="grid grid-cols-6 gap-4">
-            {icons.map((icon) => (
+            {icons && icons.map((icon) => (
                 <div key={icon.icone_id}>
                   <input onChange={(e) => setTaskData({...taskData, icone_id: parseInt(e.target.value)})} checked={taskData.icone_id == icon.icone_id} type="radio" id={`icon-${icon.icone_id}`} value={icon.icone_id} class="hidden peer"/>
                   <label htmlFor={`icon-${icon.icone_id}`} class="bg-slate-200 inline-flex items-center justify-between p-5 text-gray-500 bg-slate-100 border-2 border-slate-100 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-amber-200 peer-checked:bg-amber-200 peer-checked:border-amber-200 hover:text-gray-600 dark:peer-checked:text-gray-300 peer-checked:text-gray-600 hover:bg-slate-200 hover:border-slate-200 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700 p-1">
@@ -149,7 +149,7 @@ const TaskModal = ({ task, icons, status, onClose, isOpen }) => {
         <div className="mb-4">
           <h6>Status</h6>
           <div className="flex flex-wrap gap-2">
-            {status.map((sts) => (
+            {status && status.map((sts) => (
               <div key={sts.status_id} className="w-[48%] buttons">
                   <input onChange={(e) => setTaskData({...taskData, status_id: parseInt(e.target.value)})} checked={taskData.status_id === sts.status_id} type="radio" id={`status-${sts.status_id}`} value={sts.status_id} className="hidden peer"/>
                   <label htmlFor={`status-${sts.status_id}`} className="w-full inline-flex items-center p-1 text-gray-500 bg-white border-2 border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 peer-checked:border-blue-600 hover:text-gray-600 dark:peer-checked:text-gray-300 peer-checked:text-gray-600 hover:bg-gray-50 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">
